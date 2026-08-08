@@ -1,0 +1,27 @@
+
+# Dependencies & Build Output
+node_modules/
+**/node_modules/
+dist/
+dist-ssr/
+build/
+*.local
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Environment Variables & Secrets
+.env
+**/CL-backend/.env
+
+# Uploads & Media
+uploads/
+**/uploads/

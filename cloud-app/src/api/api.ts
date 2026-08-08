@@ -1,0 +1,80 @@
+
+
+import axios from "axios";
+
+const API = axios.create({
+  baseURL: "http://localhost:5000/api/users", // your backend URL
+});
+
+// --- User Authentication and Activation ---
+// Fetch all shoes
+export const getAllShoes = () => API.get('/shoes');
+// If the owner needs to upload (for the Admin Panel)
+export const addShoe = (shoeData: FormData) => API.post('/shoes/add', shoeData, {
+    headers: { "Content-Type": "multipart/form-data" }
+});
+
+export const register = (userData: any) => API.post("/register", userData);
+
+// 🔑 NEW: Function to activate the account (for Step 2 of Sign-Up)
+export const activateAccount = (data: { email: string, otp: string }) => 
+  API.post("/activate", data);
+
+// 🔑 NEW: Function to request the OTP during 2FA Login (Step 1 of Login)
+export const loginOTPRequest = (data: { email: string, password: string }) => 
+  API.post("/login-otp-request", data);
+
+// UPDATED: Login now sends email, password, AND otp
+export const login = (data: { email: string; password: string; otp?: string }) => 
+    API.post("/login", data);
+
+// --- User Data and Profile ---
+
+export const getProfile = ( token: string) =>
+  API.get(`/profile`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+
+export const resendOTP = (data: { email: string, reason?: string }) => 
+  API.post("/resend-otp", data);
+
+// --- Update User Information (Name, etc.) ---
+export const updateProfile = (data: { name: string }, token: string) => 
+  API.put("/update-profile", data, {
+    headers: { Authorization: `Bearer ${token}` }
+  });
+
+// --- Update Profile Picture (Already in your code, but ensure it matches this) ---
+// --- Update Profile Picture ---
+export const uploadProfilePic = (formData: FormData, token: string) => {
+    // Use the 'API' instance instead of 'axios' directly
+    return API.post("/upload-profile-pic", formData, {
+        headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
+        },
+    });
+};
+
+// --- Account Deletion Flow (Optional, but good to add now) ---
+
+// Function to request the delete confirmation OTP
+export const requestDeleteOTP = (token: string) =>
+  API.post("/delete-request", {}, { 
+    headers: { Authorization: `Bearer ${token}` } 
+  });
+
+// Function to confirm deletion with password and OTP
+export const deleteUserConfirm = (data: { password: string, otp: string }, token: string) =>
+  API.delete("/delete-confirm", { 
+    data, // DELETE requests pass body data via the 'data' key in config
+    headers: { Authorization: `Bearer ${token}` } 
+  });
+
+  // Function to request the password reset OTP/link
+export const forgotPasswordRequest = (data: { email: string }) => 
+  API.post("/forgot-password-request", data);
+
+// Function to submit the new password along with the received token/OTP
+export const resetPassword = (data: { email: string, otp: string, newPassword: string }) => 
+  API.post("/reset-password", data);
