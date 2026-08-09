@@ -143,6 +143,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Loader2, Sun, Shirt, Check, ShoppingBag } from "lucide-react"; 
 import { useCart } from "../context/CartContext";
 
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+
 interface ShortsItem {
   _id: string;
   name: string;
@@ -164,7 +166,7 @@ const ShortsCard = ({ item, onAdd }: { item: ShortsItem; onAdd: () => void }) =>
     {/* Image Container */}
     <div className="relative aspect-4/5 overflow-hidden">
       <img 
-        src={`http://localhost:5000${item.imageUrl}`} 
+        src={item.imageUrl?.startsWith('http') ? item.imageUrl : `${API_URL}${item.imageUrl}`} 
         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" 
         alt={item.name} 
       />
@@ -217,7 +219,7 @@ const ShortsPage = () => {
   useEffect(() => {
     const fetchShorts = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/api/products/category/shorts");
+        const response = await axios.get(`${API_URL}/api/products/category/shorts`);
         setShorts(response.data);
       } catch (error) {
         console.error("Error fetching shorts:", error);

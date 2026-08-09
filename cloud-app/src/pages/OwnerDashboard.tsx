@@ -667,6 +667,8 @@
     import { toast } from 'sonner';
     import { Upload, Loader2, Image as ImageIcon, Edit3, Trash2, ShoppingBag, BookOpen, Package } from 'lucide-react';
 
+    const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+
     interface Product {
       _id: string;
       name: string;
@@ -708,7 +710,7 @@
 
     const fetchAllProducts = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/api/products/all");
+        const res = await axios.get(`${API_URL}/api/products/all`);
         setAllProducts(res.data);
       } catch (err) {
         console.error("Fetch Error");
@@ -720,7 +722,7 @@
     const handleUpdate = async (id: string, updatedData: Partial<Product>) => {
       try {
         const token = localStorage.getItem('token');
-        await axios.put(`http://localhost:5000/api/products/${id}`, updatedData, {
+        await axios.put(`${API_URL}/api/products/${id}`, updatedData, {
           headers: { Authorization: `Bearer ${token}` }
         });
         setEditingProduct(null);
@@ -734,7 +736,7 @@
     const handleDelete = async (id: string) => {
       try {
         const token = localStorage.getItem('token');
-        await axios.delete(`http://localhost:5000/api/products/${id}`, {
+        await axios.delete(`${API_URL}/api/products/${id}`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         setIsDeleting(null);
@@ -772,7 +774,7 @@
 
       try {
         const token = localStorage.getItem('token');
-        await axios.post('http://localhost:5000/api/products/upload', data, {
+        await axios.post(`${API_URL}/api/products/upload`, data, {
           headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'multipart/form-data' }
         });
         setFormData({ name: '', price: '', description: '', category: 'shoes' });
@@ -799,7 +801,7 @@
 
       try {
         const token = localStorage.getItem('token');
-        await axios.post('http://localhost:5000/api/blogs/upload', data, {
+        await axios.post(`${API_URL}/api/blogs/upload`, data, {
           headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'multipart/form-data' }
         });
         setBlogData({ title: '', excerpt: '', content: '', category: 'Editorial' });
@@ -1013,7 +1015,7 @@
                       <tr key={item._id} className="hover:bg-white/2 transition-colors">
                         <td className="p-6">
                           <div className="flex items-center gap-4">
-                            <img src={`http://localhost:5000${item.imageUrl}`} className="h-10 w-10 rounded-lg object-cover" alt="" />
+                            <img src={item.imageUrl?.startsWith('http') ? item.imageUrl : `${API_URL}${item.imageUrl}`} className="h-10 w-10 rounded-lg object-cover" alt="" />
                             <span className="font-bold">{item.name}</span>
                           </div>
                           <div className="flex gap-2 mt-2">

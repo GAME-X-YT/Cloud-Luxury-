@@ -14,6 +14,7 @@ interface ShoeItem {
   price: number;
   description?: string;
 }
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
 
 const ShoeItem = ({ shoe, index }: { shoe: ShoeItem, index: number }) => {
   const [qty, setQty] = useState(1);
@@ -44,7 +45,7 @@ const ShoeItem = ({ shoe, index }: { shoe: ShoeItem, index: number }) => {
     >
       <div className="relative aspect-square overflow-hidden rounded-[3rem] bg-[#0a0a0a] border border-white/5">
         <img 
-          src={`http://localhost:5000${shoe.imageUrl}`} 
+          src={shoe.imageUrl?.startsWith('http') ? shoe.imageUrl : `${API_URL}${shoe.imageUrl}`} 
           className="w-full h-full object-contain p-8 group-hover:scale-110 transition-transform duration-500" 
           alt={shoe.name} 
         />
@@ -106,7 +107,7 @@ const ShoeCategoryPage = () => {
       setLoading(true);
       try {
         // Backend expects the subCategory (type)
-        const response = await axios.get(`http://localhost:5000/api/products/shoes/${type}`);
+        const response = await axios.get(`${API_URL}/api/products/shoes/${type}`);
         setShoes(response.data);
       } catch (error) {
         console.error("Error fetching category:", error);

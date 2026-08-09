@@ -155,13 +155,15 @@ const OrderItem: React.FC<OrderProps> = ({ order }) => {
   const [status, setStatus] = useState(order.orderStatus);
   const [loading, setLoading] = useState(false);
 
+  const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+
   const handleCancel = async () => {
     if (!window.confirm("Are you sure you want to cancel?")) return;
     
     setLoading(true);
     try {
       // This sends the request to your Node.js backend
-      await axios.patch(`http://localhost:5000/api/orders/${order._id}/cancel`);
+      await axios.patch(`${API_URL}/api/orders/${order._id}/cancel`);
       setStatus('Cancelled'); 
       alert("Order Cancelled");
     } catch (err) {

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 // Assume your backend URL is stored here:
-const API_URL = 'http://localhost:5000/api/users'; // Adjust this or use your register utility
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";// Adjust this or use your register utility
 
 interface ActivateAccountProps {
     email: string;

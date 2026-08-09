@@ -6,6 +6,8 @@ import { Loader2, ShoppingBag, Eye, Plus, Minus } from "lucide-react";
 import GliteNavbar from "../component/gliteNavbar";
 // import { useCart } from "../component/OrderItem";
 
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+
 interface Product {
   _id: string;
   name: string;
@@ -28,7 +30,7 @@ const JewelryItem = ({ item, index }: { item: Product; index: number }) => {
     >
       <div className="aspect-4/5 overflow-hidden rounded-t-[4rem] rounded-b-xl bg-neutral-900/50 border border-white/5 relative">
         <img
-          src={`http://localhost:5000${item.imageUrl}`}
+          src={item.imageUrl?.startsWith('http') ? item.imageUrl : `${API_URL}${item.imageUrl}`}
           alt={item.name}
           className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
         />
@@ -98,7 +100,7 @@ const JewelryCategoryPage = () => {
       setLoading(true);
       try {
         // Fetching specifically from jewelry category and the sub-type
-        const response = await axios.get(`http://localhost:5000/api/products/jewelry/${type}`);
+        const response = await axios.get(`${API_URL}/api/products/jewelry/${type}`);
         setItems(response.data);
       } catch (error) {
         console.error("Error fetching jewelry:", error);

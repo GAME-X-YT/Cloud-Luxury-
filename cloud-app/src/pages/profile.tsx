@@ -331,6 +331,7 @@ interface User {
     email: string;
     profilePic?: string;
 }
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
 
 export default function Profile() {
     const [user, setUser] = useState<User | null>(null);
@@ -367,7 +368,7 @@ export default function Profile() {
                 setUser(profileRes.data);
                 setEditName(profileRes.data.name);
 
-                const ordersRes = await axios.get("http://localhost:5000/api/orders/my-orders", {
+                const ordersRes = await axios.get(`${API_URL}/api/orders/my-orders`, {
                     headers: { Authorization: `Bearer ${token}` }
                 });
                 setOrders(ordersRes.data);
@@ -485,7 +486,7 @@ export default function Profile() {
                             <div className="relative">
                                 {previewUrl || user.profilePic ? (
                                     <img
-                                        src={previewUrl || `http://localhost:5000/uploads/${user.profilePic}`}
+                                        src={previewUrl || `${API_URL}/uploads/${user.profilePic}`}
                                         alt="Profile"
                                         className={`w-32 h-32 rounded-full object-cover ring-2 ring-yellow-500/50 shadow-2xl transition-all duration-500 ${uploading ? 'scale-95 opacity-50' : 'scale-100 opacity-100'}`}
                                     />

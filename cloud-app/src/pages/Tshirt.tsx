@@ -149,6 +149,8 @@ import { Loader2, Sparkles, Check, ShoppingBag } from "lucide-react"; // Added C
 import TshirtNavbar from "../component/TshirtNavbar";
 import { useCart } from "../context/CartContext";
 
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+
 interface Product {
   _id: string;
   name: string;
@@ -182,7 +184,7 @@ const TShirtCollection = () => {
   useEffect(() => {
     const fetchTshirts = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/api/products/category/tshirt");
+        const response = await axios.get(`${API_URL}/api/products/category/tshirt`);
         setTshirts(response.data);
       } catch (error) {
         console.error("Error fetching t-shirts:", error);
@@ -240,7 +242,7 @@ const TShirtCollection = () => {
                 >
                   <div className="relative aspect-4/5 overflow-hidden rounded-4xl bg-neutral-900 border border-white/5 shadow-2xl transition-all duration-500 group-hover:border-yellow-500/20">
                     <img
-                      src={`http://localhost:5000${item.imageUrl}`}
+                      src={item.imageUrl?.startsWith('http') ? item.imageUrl : `${API_URL}${item.imageUrl}`}
                       alt={item.name}
                       className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
                     />

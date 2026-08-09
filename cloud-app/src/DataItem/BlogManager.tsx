@@ -18,13 +18,15 @@ const BlogManager = () => {
   const [editingBlog, setEditingBlog] = useState<Blog | null>(null);
   const [isDeleting, setIsDeleting] = useState<string | null>(null);
 
+  const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+
   useEffect(() => {
     fetchBlogs();
   }, []);
 
   const fetchBlogs = async () => {
     try {
-      const res = await axios.get('http://localhost:5000/api/blogs');
+      const res = await axios.get(`${API_URL}/api/blogs`);
       setBlogs(res.data);
     } catch (err) {
       console.error("Error fetching blogs", err);
@@ -36,7 +38,7 @@ const BlogManager = () => {
   const handleUpdate = async (id: string, updatedData: Partial<Blog>) => {
     try {
       const token = localStorage.getItem('token');
-      await axios.put(`http://localhost:5000/api/blogs/${id}`, updatedData, {
+      await axios.put(`${API_URL}/api/blogs/${id}`, updatedData, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setEditingBlog(null);
@@ -49,7 +51,7 @@ const BlogManager = () => {
   const handleDelete = async (id: string) => {
     try {
       const token = localStorage.getItem('token');
-      await axios.delete(`http://localhost:5000/api/blogs/${id}`, {
+      await axios.delete(`${API_URL}/api/blogs/${id}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setIsDeleting(null);
@@ -137,7 +139,7 @@ const BlogManager = () => {
               {blogs.map((blog) => (
                 <tr key={blog._id} className="hover:bg-white/2 transition-colors">
                   <td className="p-6 flex items-center gap-4">
-                    <img src={`http://localhost:5000${blog.imageUrl}`} className="h-12 w-12 rounded-lg object-cover grayscale hover:grayscale-0 transition-all border border-white/10" alt="" />
+                    <img src={blog.imageUrl?.startsWith('http') ? blog.imageUrl : `${API_URL}${blog.imageUrl}`} className="h-12 w-12 rounded-lg object-cover grayscale hover:grayscale-0 transition-all border border-white/10" alt="" />
                     <span className="font-bold text-gray-200 text-sm line-clamp-1">{blog.title}</span>
                   </td>
                   <td className="p-6 text-xs text-neutral-500 italic max-w-xs truncate">{blog.excerpt}</td>

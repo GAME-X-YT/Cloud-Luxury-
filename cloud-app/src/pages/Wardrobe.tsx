@@ -4,6 +4,7 @@ import { MoveRight, BookOpen, Crown, Shirt, Zap } from "lucide-react";
 import CollectNavbar from "../component/wardrobeNav";
 import { Link } from "react-router-dom";
 import axios from 'axios';
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
 
 // 1. IMPORT YOUR ACTUAL SPLASH COMPONENT HERE
 // import LoadingScreen from "../component/LoadingScreen"; 
@@ -40,7 +41,7 @@ const Collections = () => {
     const initializePage = async () => {
       try {
         // Start fetching products
-        const res = await axios.get("http://localhost:5000/api/products");
+        const res = await axios.get(`${API_URL}/api/products`);
         setProducts(res.data);
         
         // Artificial delay so the splash screen feels intentional
@@ -179,7 +180,7 @@ const Collections = () => {
             >
               <div className="relative aspect-3/4 rounded-[2.5rem] overflow-hidden bg-slate-900 border border-white/5 transition-all duration-500 group-hover:shadow-[0_0_80px_rgba(168,85,247,0.1)]">
                 <img
-                  src={item.imageUrl.startsWith('http') ? item.imageUrl : `http://localhost:5000${item.imageUrl}`}
+                  src={item.imageUrl?.startsWith('http') ? item.imageUrl : `${API_URL}${item.imageUrl}`}
                   alt={item.name}
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                 />

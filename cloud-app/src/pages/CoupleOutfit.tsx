@@ -148,6 +148,8 @@ interface Product {
   category: string;
 }
 
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+
 const CoupleCard = ({ item, onAdd }: { item: Product, onAdd: () => void }) => (
   <motion.div 
     initial={{ opacity: 0, y: 20 }}
@@ -157,7 +159,7 @@ const CoupleCard = ({ item, onAdd }: { item: Product, onAdd: () => void }) => (
   >
     <div className="relative aspect-3/4 overflow-hidden rounded-4xl md:rounded-[2.5rem] bg-neutral-900">
       <img 
-        src={`http://localhost:5000${item.imageUrl}`} 
+        src={item.imageUrl?.startsWith('http') ? item.imageUrl : `${API_URL}${item.imageUrl}`} 
         className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" 
         alt={item.name} 
       />

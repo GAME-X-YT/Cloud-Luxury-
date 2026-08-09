@@ -165,6 +165,8 @@ import { Loader2, Leaf, ThermometerSnowflake, Wind, ShoppingBag, Sparkles, Check
 import { useCart } from "../context/CartContext";
 import { Link } from "react-router-dom";
 
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+
 interface FallItem {
   _id: string;
   name: string;
@@ -189,7 +191,7 @@ const FallCard = ({ item, onAdd }: { item: FallItem; onAdd: () => void }) => {
         <div className="absolute inset-0 opacity-[0.05] pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/felt.png')] z-10" />
         
         <img 
-          src={`http://localhost:5000${item.imageUrl}`} 
+          src={item.imageUrl?.startsWith('http') ? item.imageUrl : `${API_URL}${item.imageUrl}`} 
           className="w-full h-full object-cover scale-105 group-hover:scale-110 transition-transform duration-[1.5s] ease-out" 
           alt={item.name} 
         />
@@ -254,7 +256,7 @@ const FallPage = () => {
   useEffect(() => {
     const fetchFall = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/api/products/category/fall-clothes");
+        const response = await axios.get(`${API_URL}/api/products/category/fall-clothes`);
         setItems(response.data);
       } catch (error) {
         console.error("Error fetching Fall collection:", error);

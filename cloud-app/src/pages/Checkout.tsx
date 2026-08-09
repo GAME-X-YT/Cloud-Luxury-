@@ -119,6 +119,8 @@ import axios from "axios";
 import { useCart } from "../context/CartContext";
 import { toast } from 'sonner';
 
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+
 const CheckoutPage = () => {
   const navigate = useNavigate();
   const { cart, cartCount, clearCart } = useCart();
@@ -167,7 +169,9 @@ const CheckoutPage = () => {
       orderStatus: "Processing", 
     };
 
-    const response = await axios.post("http://localhost:5000/api/orders", orderData, {
+    
+
+    const response = await axios.post(`${API_URL}/api/orders`, orderData, {
       headers: { Authorization: `Bearer ${token}` }
     });
 
@@ -273,7 +277,11 @@ const CheckoutPage = () => {
           <div className="max-h-60 overflow-y-auto pr-2 mb-6 space-y-4 custom-scrollbar">
             {cart.map((item) => (
               <div key={item._id} className="flex gap-4 items-center">
-                <img src={`http://localhost:5000${item.imageUrl}`} className="w-16 h-20 object-cover rounded-xl bg-black" alt={item.name} />
+                <img 
+                src={item.imageUrl?.startsWith('http') ? item.imageUrl : `${API_URL}${item.imageUrl}`} 
+                className="w-16 h-20 object-cover rounded-xl bg-black" 
+                alt={item.name} 
+              />
                 <div className="flex-1">
                   <h3 className="text-sm font-medium line-clamp-1">{item.name}</h3>
                   <p className="text-neutral-500 text-xs font-bold">₦{item.price.toLocaleString()} x {item.qty}</p>

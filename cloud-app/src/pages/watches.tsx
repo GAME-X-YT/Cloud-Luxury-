@@ -154,6 +154,7 @@ import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHome } from "@fortawesome/free-solid-svg-icons";
 import { useCart } from "../context/CartContext"; // Import your cart hook
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
 
 interface WatchItem {
   _id: string;
@@ -175,7 +176,7 @@ const WatchCard = ({ item, onAdd }: { item: WatchItem; onAdd: () => void }) => (
     {/* Image Container */}
     <div className="relative aspect-4/5 overflow-hidden">
       <img 
-        src={`http://localhost:5000${item.imageUrl}`} 
+        src={item.imageUrl?.startsWith('http') ? item.imageUrl : `${API_URL}${item.imageUrl}`} 
         className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" 
         alt={item.name} 
       />
@@ -230,7 +231,7 @@ const WatchPage = () => {
   useEffect(() => {
     const fetchWatches = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/api/products/category/watches");
+        const response = await axios.get(`${API_URL}/api/products/category/watches`);
         setWatches(response.data);
       } catch (error) {
         console.error("Error fetching watches:", error);

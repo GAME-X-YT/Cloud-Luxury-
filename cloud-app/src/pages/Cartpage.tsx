@@ -13,11 +13,15 @@ import {
    
 } from "@fortawesome/free-solid-svg-icons";
 
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+
 const CartPage = () => {
   const { cart, addToCart, cartCount, clearCart } = useCart();
   const [isModalOpen, setIsModalOpen] = useState(false); // Modal State
 
   const total = cart.reduce((acc, item) => acc + item.price * item.qty, 0);
+
+  
 
   // Function to handle the actual clearing and closing the modal
 const handleConfirmClear = () => {
@@ -105,7 +109,7 @@ const handleConfirmClear = () => {
                   className="flex gap-6 bg-white/5 border border-white/10 p-4 rounded-4xl md:rounded-4xl items-center"
                 >
                 <img 
-                  src={`http://localhost:5000${item.imageUrl}`} 
+                  src={item.imageUrl?.startsWith('http') ? item.imageUrl : `${API_URL}${item.imageUrl}`} 
                   alt={item.name} 
                   className="w-24 h-32 object-cover rounded-2xl bg-neutral-900" 
                 />

@@ -159,6 +159,7 @@ function SearchBar({ showSearch, setShowSearch }: SearchBarProps) {
     const [focused, setFocused] = useState(false);
     const [isSearching, setIsSearching] = useState(false);
     const navigate = useNavigate();
+    const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
 
     // The categories you want to auto-redirect to
     const smartCategories = ['shoes', 'watches', 'jewelry', 'tshirt', 'hoodie'];
@@ -180,7 +181,7 @@ function SearchBar({ showSearch, setShowSearch }: SearchBarProps) {
     const performSearch = async (searchTerm: string) => {
         setIsSearching(true);
         try {
-            const response = await axios.get(`http://localhost:5000/api/products/search?q=${searchTerm}`);
+            const response = await axios.get(`${API_URL}/api/products/search?q=${searchTerm}`);
             const results = response.data.map((product: any) => ({
                 name: product.name,
                 path: `/wardrobe/${product._id}`,

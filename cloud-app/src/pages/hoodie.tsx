@@ -252,6 +252,7 @@ import {
   faArrowLeft, 
 } from "@fortawesome/free-solid-svg-icons";
 
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
 
 interface HoodieItem {
   _id: string;
@@ -272,7 +273,7 @@ const HoodieCard = ({ item, onAdd }: { item: HoodieItem; onAdd: () => void }) =>
     <div className="relative aspect-4/5 overflow-hidden rounded-2xl md:rounded-3xl bg-neutral-900 border border-white/5 group-hover:border-yellow-500/30 transition-all duration-500">
       {/* Product Image */}
       <img 
-        src={`http://localhost:5000${item.imageUrl}`} 
+        src={item.imageUrl?.startsWith('http') ? item.imageUrl : `${API_URL}${item.imageUrl}`} 
         className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" 
         alt={item.name} 
       />
@@ -301,6 +302,7 @@ const HoodieCard = ({ item, onAdd }: { item: HoodieItem; onAdd: () => void }) =>
   </motion.div>
 );
 
+
 const HoodiePage = () => {
   const [hoodies, setHoodies] = useState<HoodieItem[]>([]);
   const [loading, setLoading] = useState(true);
@@ -320,7 +322,7 @@ const HoodiePage = () => {
   useEffect(() => {
     const fetchHoodies = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/api/products/category/hoodie");
+        const response = await axios.get(`${API_URL}/api/products/category/hoodie`);
         setHoodies(response.data);
       } catch (error) {
         console.error("Error fetching hoodies:", error);

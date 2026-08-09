@@ -9,6 +9,8 @@ import {
 } from "lucide-react";
 import ShoeNavbar from "../component/shoeNavbar";
 
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+
 interface ShoeItem {
   _id: string;
   name: string;
@@ -28,7 +30,7 @@ const ShoePage = () => {
   useEffect(() => {
     const fetchShoes = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/api/products/category/shoes");
+        const response = await axios.get(`${API_URL}/api/products/category/shoes`);
         setShoes(response.data);
       } catch (error) {
         console.error("Error fetching shoes:", error);
@@ -90,7 +92,7 @@ const ShoePage = () => {
                     <motion.img
                       whileHover={{ scale: 1.1, rotate: -2 }}
                       transition={{ duration: 0.6 }}
-                      src={`http://localhost:5000${shoe.imageUrl}`}
+                      src={shoe.imageUrl?.startsWith('http') ? shoe.imageUrl : `${API_URL}${shoe.imageUrl}`}
                       alt={shoe.name}
                       className="w-full h-full object-contain p-8"
                     />

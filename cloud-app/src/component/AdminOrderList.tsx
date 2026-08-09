@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { CheckCircle, XCircle } from 'lucide-react';
 
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+
 const AdminOrderList = () => {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -9,9 +11,9 @@ const AdminOrderList = () => {
   const fetchAllOrders = async () => {
     try {
       const token = localStorage.getItem('token');
-      const { data } = await axios.get('http://localhost:5000/api/orders/admin/all', {
+      const { data } = await axios.get(`${API_URL}/api/orders/admin/all`    , {
         headers: { Authorization: `Bearer ${token}` }
-      });
+      });     
       setOrders(data);
     } catch (err) {
       console.error("Admin fetch error", err);
@@ -25,7 +27,7 @@ const AdminOrderList = () => {
   const handleVerify = async (id: string, status: 'Paid' | 'Failed') => {
     try {
       const token = localStorage.getItem('token');
-      await axios.patch(`http://localhost:5000/api/orders/admin/${id}/payment`, 
+      await axios.patch(`${API_URL}/api/orders/admin/${id}/payment`, 
         { status }, 
         { headers: { Authorization: `Bearer ${token}` }}
       );

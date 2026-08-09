@@ -16,6 +16,8 @@ interface JewelryItem {
   subCategory: string;
 }
 
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+
 const JewelryCollections = () => {
   const [jewelry, setJewelry] = useState<JewelryItem[]>([]);
   const [loading, setLoading] = useState(true);
@@ -26,7 +28,7 @@ const JewelryCollections = () => {
     const fetchJewelry = async () => {
       try {
         // Replace with your actual backend URL
-        const response = await axios.get("http://localhost:5000/api/products/category/jewelry");
+        const response = await axios.get(`${API_URL}/api/products/category/jewelry`);
         console.log("Data received:", response.data); // Debug: Check your console!
         setJewelry(response.data);
       } catch (error) {
@@ -84,7 +86,7 @@ const JewelryCollections = () => {
                 >
                   <div className="relative h-64 w-full overflow-hidden rounded-3xl bg-neutral-800">
                     <img
-                      src={`http://localhost:5000${item.imageUrl}`}
+                      src={item.imageUrl?.startsWith('http') ? item.imageUrl : `${API_URL}${item.imageUrl}`}
                       alt={item.name}
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform"
                     />

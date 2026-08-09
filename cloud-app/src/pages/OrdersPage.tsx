@@ -169,6 +169,8 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { Package, Clock, CheckCircle } from "lucide-react";
 
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+
 const OrdersPage = () => {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -177,7 +179,7 @@ const OrdersPage = () => {
     const fetchMyOrders = async () => {
       try {
         const token = localStorage.getItem("token");
-        const res = await axios.get("http://localhost:5000/api/orders/my-orders", {
+        const res = await axios.get(`${API_URL}/api/orders/my-orders`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         setOrders(res.data);

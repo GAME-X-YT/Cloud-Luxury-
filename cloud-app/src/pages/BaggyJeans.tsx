@@ -144,6 +144,8 @@ interface Product {
   description?: string;
 }
 
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+
 const JeansCard = ({ item, onAdd }: { item: Product; onAdd: () => void }) => (
   <motion.div 
     initial={{ opacity: 0, y: 30 }}
@@ -154,7 +156,7 @@ const JeansCard = ({ item, onAdd }: { item: Product; onAdd: () => void }) => (
     <div className="relative aspect-3/4 overflow-hidden rounded-2xl bg-[#111] border border-white/5 shadow-2xl">
       {/* High-Contrast Image */}
       <img 
-        src={`http://localhost:5000${item.imageUrl}`} 
+        src={`${API_URL}${item.imageUrl}`} 
         className="w-full h-full object-cover group-hover:scale-110 transition-all duration-1000 grayscale-[0.3] group-hover:grayscale-0" 
         alt={item.name} 
       />
@@ -215,7 +217,7 @@ const BaggyJeansPage = () => {
   useEffect(() => {
     const fetchJeans = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/api/products/category/baggy-jeans");
+        const response = await axios.get(`${API_URL}/api/products/category/baggy-jeans`);
         setJeans(response.data);
       } catch (error) {
         console.error("Error fetching jeans:", error);

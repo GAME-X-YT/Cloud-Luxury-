@@ -178,6 +178,8 @@ import {
   faArrowLeft, 
 } from "@fortawesome/free-solid-svg-icons";
 
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+
 const HelpCenter = () => {
     // 1. STATE DECLARATIONS (Must come first!)
     const [searchQuery, setSearchQuery] = useState("");
@@ -222,7 +224,7 @@ const HelpCenter = () => {
         if (!orderNumber) return;
         setIsSearching(true);
         try {
-            const response = await fetch('http://localhost:5000/api/help/track', {
+            const response = await fetch(`${API_URL}/api/help/track`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ orderId: orderNumber })
@@ -251,7 +253,7 @@ const HelpCenter = () => {
         setIsTyping(true); // Start typing animation
 
         try {
-            const response = await fetch('http://localhost:5000/api/chat', {
+            const response = await fetch(`${API_URL}/api/chat`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ message: currentInput })

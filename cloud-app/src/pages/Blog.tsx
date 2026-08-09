@@ -21,11 +21,13 @@ const BlogPage = () => {
   const [posts, setPosts] = useState<BlogPost[]>([]);
   const [loading, setLoading] = useState(true);
 
+  const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+
   // 2. Fetch data from Backend
   useEffect(() => {
     const fetchBlogs = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/api/blogs");
+        const response = await axios.get(`${API_URL}/api/blogs`);
         setPosts(response.data);
       } catch (error) {
         console.error("Error fetching journal entries:", error);
@@ -108,7 +110,7 @@ const BlogPage = () => {
                 <div className="relative aspect-16/10 overflow-hidden rounded-3xl bg-neutral-900 border border-white/5 mb-8">
                   <img 
                     // 3. Updated Image Path to point to Backend Server
-                    src={`http://localhost:5000${post.imageUrl}`} 
+                    src={post.imageUrl?.startsWith('http') ? post.imageUrl : `${API_URL}${post.imageUrl}`} 
                     alt={post.title}
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 opacity-80 group-hover:opacity-100"
                   />
